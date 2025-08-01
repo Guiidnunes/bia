@@ -74,3 +74,55 @@ O foco base dele é fornecer uma estrutura educacional em que o aluno possa evol
 4. **Testes:** Estrutura de testes presente com Jest
 
 ---
+
+## Ambiente de Produção (ECS)
+
+### Infraestrutura Atual
+- **Cluster ECS:** cluster-bia
+- **Service:** service-bia (ACTIVE)
+- **Task Definition:** task-def-bia:1
+- **Container:** bia (porta 8080 → 80)
+- **IP Público:** 54.82.245.198
+
+### Banco de Dados RDS
+- **Identificador:** bia
+- **Engine:** PostgreSQL 17.4
+- **Endpoint:** bia.culeoqqiacvk.us-east-1.rds.amazonaws.com:5432
+- **Status:** available ✅
+
+### API Endpoints Disponíveis
+
+#### GET /api/tarefas
+**URL:** http://54.82.245.198/api/tarefas  
+**Descrição:** Retorna lista de tarefas armazenadas no banco PostgreSQL  
+**Status:** ✅ Funcionando
+
+**Exemplo de Resposta:**
+```json
+[
+  {
+    "uuid": "0cac49f0-6f06-11f0-aefa-41538234cd58",
+    "titulo": "DEPLOY NO ECS VIA SCRIPT",
+    "dia_atividade": "DIA 2",
+    "importante": true,
+    "createdAt": "2025-08-01T18:33:42.160Z",
+    "updatedAt": "2025-08-01T18:33:42.160Z"
+  },
+  {
+    "uuid": "180d0a00-6f06-11f0-aefa-41538234cd58",
+    "titulo": "DIAGNÓSTICO DO MEU PROJETO RODANDO NO ECS",
+    "dia_atividade": "DIA 2",
+    "importante": false,
+    "createdAt": "2025-08-01T18:34:01.248Z",
+    "updatedAt": "2025-08-01T18:34:01.248Z"
+  }
+]
+```
+
+### Status da Comunicação
+- ✅ ECS ↔ RDS: Comunicação funcionando perfeitamente
+- ✅ API respondendo corretamente
+- ✅ Dados sendo persistidos no PostgreSQL
+- ✅ Security Groups configurados adequadamente
+
+---
