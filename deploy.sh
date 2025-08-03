@@ -8,9 +8,9 @@ set -e
 
 # Configurações
 REGION="us-east-1"
-CLUSTER_NAME="cluster-bia"
-SERVICE_NAME="service-bia"
-TASK_FAMILY="task-def-bia"
+CLUSTER_NAME="cluster-bia-alb"
+SERVICE_NAME="service-bia-alb"
+TASK_FAMILY="task-def-bia-alb"
 ECR_REPOSITORY="098978302313.dkr.ecr.us-east-1.amazonaws.com/bia"
 CONTAINER_NAME="bia"
 
