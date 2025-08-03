@@ -243,7 +243,7 @@ update_service() {
         --service "$SERVICE_NAME" \
         --task-definition "$task_definition" \
         --region $REGION \
-        --output table
+        --output table > /dev/null
     
     log_success "Serviço atualizado com sucesso"
 }
