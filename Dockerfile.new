@@ -1,0 +1,36 @@
+FROM public.ecr.aws/docker/library/node:18-slim
+
+# Upgrade do npm para versão compatível com Node 18
+RUN npm install -g npm@10 --loglevel=error
+
+# Instalando curl para health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+# Copiar package.json do projeto raiz e instalar dependências
+COPY package*.json ./
+RUN npm install --loglevel=error
+
+# Copiar package.json do client e instalar dependências (incluindo devDependencies para build)
+COPY client/package*.json ./client/
+RUN cd client && npm install --legacy-peer-deps --loglevel=error
+
+# Copiar todos os arquivos do projeto
+COPY . .
+
+# Definir variáveis de ambiente para o build do Vite
+ENV VITE_API_URL=http://localhost:3002
+ENV VITE_DEBUG_MODE=false
+
+# Build do frontend React com Vite
+RUN cd client && npm run build
+
+# Expor a porta 3002 conforme solicitado
+EXPOSE 3002
+
+# Definir a porta para o servidor Express
+ENV PORT=3002
+
+# Comando para iniciar a aplicação
+CMD ["npm", "start"]
