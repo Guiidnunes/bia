@@ -21,10 +21,19 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Fazendo deploy no ECS...
+      - echo "Verificando status atual do serviço..."
+      - aws ecs describe-services --cluster cluster-bia-alb --services service-bia-alb --region us-east-1
       - echo "Atualizando serviço ECS cluster-bia-alb/service-bia-alb"
-      - aws ecs update-service --cluster cluster-bia-alb --service service-bia-alb --force-new-deployment --region us-east-1
+      - |
+        if aws ecs update-service --cluster cluster-bia-alb --service service-bia-alb --force-new-deployment --region us-east-1; then
+          echo "Update service executado com sucesso"
+        else
+          echo "Erro no update service, tentando novamente em 30 segundos..."
+          sleep 30
+          aws ecs update-service --cluster cluster-bia-alb --service service-bia-alb --force-new-deployment --region us-east-1
+        fi
       - echo "Aguardando estabilização do serviço..."
-      - aws ecs wait services-stable --cluster cluster-bia-alb --services service-bia-alb --region us-east-1
+      - aws ecs wait services-stable --cluster cluster-bia-alb --services service-bia-alb --region us-east-1 --cli-read-timeout 600 --cli-connect-timeout 60
       - echo "Deploy concluído com sucesso!"
       - echo Gerando artefato da imagem para o ECS
       - printf '[{"name":"bia","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
