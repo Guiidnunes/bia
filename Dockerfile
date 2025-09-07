@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /usr/src/app
 
 # Copiar package.json raiz primeiro
-COPY package*.json ./
+COPY package.json package-lock.json ./
 RUN npm install --loglevel=error
 
 # Copiar package.json do client e instalar dependências (incluindo devDependencies para build)
